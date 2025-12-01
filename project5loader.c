@@ -34,4 +34,29 @@ static unsigned int parse_hex(const char *s) {
     return value;
 }
 
+/* 
+  Tokenizes a line based on whitespace and '^'.
+  Example
+    "T^001000^1E^141033^28^30"
 
+  becomes:
+        tokens[0] = "T"
+        tokens[1] = "001000"
+        tokens[2] = "1E"
+        tokens[3] = "141033"
+        ...
+
+  Returns the number of tokens extracted.
+*/
+
+static int tokenize(char *line, char *tokens[], int max) {
+    int count = 0;
+    char *p = strtok(line, " \t\n\r^");
+
+    while (p && count < max) {
+        tokens[count++] = p;
+        p = strtok(NULL, " \t\n\r^");
+    }
+
+    return count;
+}
