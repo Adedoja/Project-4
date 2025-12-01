@@ -34,3 +34,25 @@ static unsigned int parse_hex(const char *s) {
     return value;
 }
 
+/*
+    helper function for XE Relocations
+ takes in the converted hex and  original address from the h,t,m,e record 
+ takes into account the bit mask and converts the record
+*/ 
+static unsigned int sicXeRelocator(int convertedHex,int orginalAddress){
+
+/*
+if (4Byteinstruction){     
+    printf("ERROR: not relocatable);
+}
+  */  
+    // format 1 and 2 relocation is direct
+
+
+
+
+//format 3 and 4 relative addressing 
+
+
+
+    
