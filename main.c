@@ -9,8 +9,8 @@ int main(int argc, char *argv[]){
     FILE *object=NULL;
     int returnvalue=0;
 
-    if (argc <2){
-        printf("error, there should be two arguments %s <sourcefile>\n", argv[0]);
+    if (argc <3){
+        printf("error, there should be three arguments %s <sourcefile>\n", argv[0]);
         return 1;
     }
     const char *Source= argv[1];
