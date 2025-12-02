@@ -41,7 +41,7 @@ static unsigned int parse_hex(const char *s) {
         } else if (c >= 'a' && c <= 'f') {
             value |= (unsigned int)(c - 'a' + 10);
         } else {
-            /* If it's not a 0?^`^s9, A?^`^sF, or a?^`^sf, it's not valid hex. >
+            /* If it's not a 0`s9, A`sF, or a`sf, it's not valid hex. >
             printf("error: invalid hex digit '%c' in relocation address\n", c);
             exit(1);
         }
