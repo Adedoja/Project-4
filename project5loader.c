@@ -39,13 +39,14 @@ static unsigned int parse_hex(const char *s) {
  takes in the converted hex and  original address from the h,t,m,e record 
  takes into account the bit mask and converts the record
 */ 
-static unsigned int sicXeRelocator(int convertedHex,int orginalAddress){
+static int sicXeRelocator(int convertedHex,int orginalAddress){
+// the original address is located in the 2nd set of 6 characters 
 
-/*
-if (4Byteinstruction){     
-    printf("ERROR: not relocatable);
-}
-  */  
+
+int result=0;
+int increment=0;
+int replaceVal =(convertedHex + orignalAddress);
+      
     // format 1 and 2 relocation is direct
 
 
@@ -53,6 +54,9 @@ if (4Byteinstruction){
 
 //format 3 and 4 relative addressing 
 
+
+    return result;
+}
 
 
     
