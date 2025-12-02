@@ -4,35 +4,36 @@
 #include <ctype.h>
 
 /*
-    We will call project5loader() from project5loader.c.
-    This function will actually perform the relocation and print
-    the relocated T and E records.
-*/
+    Forward declaration of the loader function that lives in project5loader.c
 
-float project5loader(FILE *object, unsigned int new_start, int machine_type);
+    - object:      already opened FILE* for the object file
+    - new_start:   relocation start address (from command line, already parsed)
+    - machine_type: 0 = SIC, 1 = SICXE
+
+    The function will do all the relocation work and print T and E records.
+*/
+int project5loader(FILE *object, unsigned int new_start, int machine_type);
 
 /*
-    Helper function:
-    Converts a string containing HEX digits into an unsigned int.
-    Example: "4000" -> 0x4000
-    We need this because the relocation address is given in HEX.
-*/
+    This helper function takes a string that contains hex digits,
+    like "003000", and converts it into an unsigned int (0x003000).
 
+    I use this to convert the relocation address from argv[2].
+*/
 static unsigned int parse_hex(const char *s) {
     unsigned int value = 0;
 
     while (*s) {
         char c = *s++;
 
-       /* stop if whitespace at end */
-        if (isspace((unsigned)c)) {
+        /* If I hit whitespace, I consider the hex field done. */
+        if (isspace((unsigned char)c)) {
             break;
         }
 
-        /* shift existing value by one hex digit (4 bits) */
+        /* Make room for one hex digit (4 bits) by shifting left. */
         value <<= 4;
 
-        /* convert hex char to number */
        if (c >= '0' && c <= '9') {
             value |= (unsigned int)(c - '0');
         } else if (c >= 'A' && c <= 'F') {
@@ -40,54 +41,51 @@ static unsigned int parse_hex(const char *s) {
         } else if (c >= 'a' && c <= 'f') {
             value |= (unsigned int)(c - 'a' + 10);
         } else {
-            /* if we get here, the digit wasn't valid HEX */
-            printf("error: invalid hex digit '%c'\n", c);
+            /* If it's not a 0?^`^s9, A?^`^sF, or a?^`^sf, it's not valid hex. >
+            printf("error: invalid hex digit '%c' in relocation address\n", c);
             exit(1);
-       }
+        }
     }
-
     return value;
 }
 
 int main(int argc, char *argv[]) {
 
-    FILE *object = NULL;          /* file pointer for opening the object file */
-    unsigned int new_start = 0;   /* relocation starting address (hex -> int) */
+    FILE *object = NULL;          /* will point to the object file */
+    unsigned int new_start = 0;   /* relocation start address (parsed from hex)>
     int machine_type = -1;        /* 0 = SIC, 1 = SICXE */
-    int returnvalue = 0;          /* what we return from project5loader() */
+    int returnvalue = 0;          /* value returned by project5loader() */
 
-/*
-        We expect EXACTLY three arguments after the program name:
+    /*
+        I expect the user to run the program like this:
 
-            argv[1] = object file name
-            argv[2] = relocation address (hex)
-            argv[3] = machine type (SIC or SICXE)
+            ./project5loader <objectfile> <new_start_hex> <SIC|SICXE>
 
-        argc must therefore be 4 (program name + 3 arguments).
+        So there should be exactly 3 arguments after the program name.
+        That means argc must be 4 total.
     */
-
-if (argc != 4) {
+    if (argc != 4) {
         printf("error: there should be three arguments\n");
         printf("usage: %s <objectfile> <new_start_hex> <SIC|SICXE>\n", argv[0]);
         return 1;
     }
 
- /*
-        Save the object file name from the command line.
-        We do NOT modify it or add extensions. The user gives the exact name.
+    /*
+        argv[1] is the name of the object file produced by the assembler.
+        I just store it in a const char* and use it for fopen.
     */
-
     const char *ObjectFileName = argv[1];
 
-/* 
-    convert the hex string (argv[2]) into a interger.
-    Example input: "4000" -> 0x4000
+    /*
+argv[2] is the relocation start address in hex (string).
+        I convert it to an unsigned int using my helper.
+        Example: "003000" becomes 0x003000.
     */
     new_start = parse_hex(argv[2]);
 
-/*
-        Determine which machine type: SIC or SICXE.
-        We simply compare the string.
+    /*
+        argv[3] tells me which machine we are loading for: SIC or SICXE.
+        I store this as a simple integer flag.
     */
     if (strcmp(argv[3], "SIC") == 0) {
         machine_type = 0;
@@ -96,11 +94,11 @@ if (argc != 4) {
     } else {
         printf("error: machine type must be SIC or SICXE\n");
         return 1;
-    }
+  }
 
-   /*
-        Try to open the object file that the user passed in.
-        We open in text mode because SIC object files are text.
+    /*
+        Now I try to open the object file the user gave me.
+        The loader expects the file to contain H, T, (M for XE), and E records.
     */
     object = fopen(ObjectFileName, "r");
     if (!object) {
@@ -108,25 +106,21 @@ if (argc != 4) {
         return 1;
     }
 
-/*
-        Call the function that does all the work.
-        project5loader.c must provide this function.
-
-        It should:
-            - read the object file
-            - apply relocation according to machine_type
-            - print the relocated T and E records to stdout
+    /*
+        Here I hand off control to the actual loader function defined in
+        project5loader.c. It will read the object file, relocate it, and
+        print the relocated T and E records to stdout.
     */
-
-returnvalue = project5loader(object, new_start, machine_type);
+    returnvalue = project5loader(object, new_start, machine_type);
 
     /*
-        Close the file because we are done with it.
+        Done with the file, so I close it.
     */
     fclose(object);
 
     /*
-        Return whatever project5loader() returned (usually 0 if successful).
+        Return whatever the loader returned (0 for success, non-zero for error).
     */
     return returnvalue;
 }
+
