@@ -1,0 +1,79 @@
+#!/bin/sh
+
+clear
+echo "================================================"
+echo "      Project 4: SIC / SICXE Relocating Loader"
+echo "================================================"
+echo
+
+######################################################
+echo "Step 1: Build project5loader"
+echo "--------------------------------------------------"
+make
+echo
+echo "Press Enter to continue..."
+read dummy
+echo
+
+
+######################################################
+echo "SIC Demo - test22.sic.obj relocated to 003000"
+echo "--------------------------------------------------"
+echo "Input file: test22.sic.obj"
+echo "--------------------------"
+cat test22.sic.obj
+echo
+echo "Press Enter to run the loader..."
+read dummy
+
+echo
+echo "./project5loader test22.sic.obj 003000 SIC"
+./project5loader test22.sic.obj 003000 SIC
+echo
+echo "Press Enter for the next demo..."
+read dummy
+echo
+
+
+######################################################
+echo "SIC Demo - test29.sic.obj relocated to 003000"
+echo "--------------------------------------------------"
+echo "Input file: test29.sic.obj"
+echo "--------------------------"
+cat test29.sic.obj
+echo
+echo "Press Enter to run the loader..."
+read dummy
+
+echo
+echo "./project5loader test29.sic.obj 003000 SIC"
+./project5loader test29.sic.obj 003000 SIC
+  echo
+echo "Press Enter for the XE demo..."
+read dummy
+echo
+
+
+######################################################
+echo "SICXE Demo - testXE.sic.obj relocated to 003000"
+echo "--------------------------------------------------"
+echo "Input file: testXE.sic.obj"
+echo "--------------------------"
+cat testXE.sic.obj
+echo
+echo "Press Enter to run the loader..."
+read dummy
+
+echo
+echo "./project5loader testXE.sic.obj 003000 SICXE"
+./project5loader testXE.sic.obj 003000 SICXE
+echo
+echo "Press Enter to finish..."
+read dummy
+echo
+
+
+echo "================================================"
+echo "               Demo Complete! Thank you for listening!"
+echo "================================================"
+echo
