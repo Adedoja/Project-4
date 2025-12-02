@@ -9,4 +9,4 @@ project5loader.o: project5loader.c
 
 .PHONY: clean
 clean:
-        rm -f project5loader *.o *.dbg *.obj *.sic.obj *.sic.sic.obj
+        rm -f project5loader *.o *.dbg 
