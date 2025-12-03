@@ -41,7 +41,7 @@ static unsigned int parse_hex(const char *s) {
         } else if (c >= 'a' && c <= 'f') {
             value |= (unsigned int)(c - 'a' + 10);
         } else {
-            /* If it's not a 0`s9, A`sF, or a`sf, it's not valid hex. >
+            /* If it's not a 0`s9, A`sF, or a`sf, it's not valid hex. */
             printf("error: invalid hex digit '%c' in relocation address\n", c);
             exit(1);
         }
@@ -52,7 +52,7 @@ static unsigned int parse_hex(const char *s) {
 int main(int argc, char *argv[]) {
 
     FILE *object = NULL;          /* will point to the object file */
-    unsigned int new_start = 0;   /* relocation start address (parsed from hex)>
+    unsigned int new_start = 0;   /* relocation start address (parsed from hex)*/
     int machine_type = -1;        /* 0 = SIC, 1 = SICXE */
     int returnvalue = 0;          /* value returned by project5loader() */
 
